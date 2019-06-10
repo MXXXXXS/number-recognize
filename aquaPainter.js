@@ -29,7 +29,7 @@ function canvasInitState(ctx) {
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
   ctx.miterLimit = 3
-  ctx.lineWidth = 45
+  ctx.lineWidth = 30
 }
 
 canvasInitState(ctx)
@@ -86,9 +86,57 @@ canvas.onmouseout = () => {
 }
 
 canvas.onmouseup = () => {
+  lastPoints = []
   beAbleToDraw = false
 }
 
 canvas.onmousedown = () => {
+  beAbleToDraw = true
+}
+
+canvas.ontouchmove = (e) => {
+  e.preventDefault();
+  if (beAbleToDraw) {
+    const clientX = e.touches[0].clientX
+    const clientY = e.touches[0].clientY
+    const canvasX = canvas.offsetLeft
+    const canvasY = canvas.offsetTop
+
+    const x = clientX - canvasX
+    const y = clientY - canvasY
+    //需要在画布内
+    if (lastPoints.length === 4) {
+      ctx.beginPath()
+      ctx.moveTo(
+        lastPoints[0],
+        lastPoints[1]
+      )
+      ctx.quadraticCurveTo(
+        lastPoints[2],
+        lastPoints[3],
+        x,
+        y)
+      ctx.stroke()
+      lastPoints.shift()
+      lastPoints.shift()
+    }
+    lastPoints.push(x)
+    lastPoints.push(y)
+  } else {
+    lastPoints = []
+  }
+}
+
+canvas.ontouchcancel = () => {
+  lastPoints = []
+  beAbleToDraw = false
+}
+
+canvas.ontouchend = () => {
+  lastPoints = []
+  beAbleToDraw = false
+}
+
+canvas.ontouchstart = () => {
   beAbleToDraw = true
 }

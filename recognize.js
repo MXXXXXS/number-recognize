@@ -8,10 +8,11 @@ document.querySelector(`.recog`).addEventListener(`click`, () => {
       canvas.width = 28
       canvas.height = 28
       const ctx = canvas.getContext(`2d`)
+      //显示缩略图
       ctx.drawImage(img, 0, 0)
-      const recogEl = document.querySelector(`.recognized`)
-      recogEl.innerHTML = ''
-      recogEl.appendChild(canvas)
+      // const recogEl = document.querySelector(`.recognized`)
+      // recogEl.innerHTML = ''
+      // recogEl.appendChild(canvas)
       const imgData = ctx.getImageData(0, 0, 28, 28).data
       const binImg = []
       //处理成二值图像
@@ -24,7 +25,8 @@ document.querySelector(`.recog`).addEventListener(`click`, () => {
       }
       const result = recognize(binImg)
       console.log(result)
-      // recogEl.innerHTML += result
+      const recogEl = document.querySelector(`.recognized`)
+      recogEl.innerText = result
       const boardCanvas = document.querySelector(`.board`)
       const boardCtx = boardCanvas.getContext(`2d`)
       boardCtx.clearRect(0, 0, boardCanvas.width, boardCanvas.height);
